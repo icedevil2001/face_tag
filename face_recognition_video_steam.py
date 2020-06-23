@@ -41,6 +41,7 @@ class Attendance(Base):
         
 
 
+
 engine = create_engine('sqlite:///database/Attendance.db', echo=True)
 Base.metadata.create_all(bind=engine)  ## create the table if present 
 
@@ -128,6 +129,9 @@ def main():
 
 	CWD = Path.cwd() 
 	reference_path = CWD / 'reference_images'
+	db_dir = CWD / 'database'
+	if not db_dir.exists():
+		db_dir.mkdir(parent=True)
 	names, ref_encodings =load_reference_images(path=reference_path)
 
 	video_stream = cv2.VideoCapture(0)
@@ -171,8 +175,9 @@ def main():
 			# print(face_loc)
 			y1,x2, y2,x1 = [int(x/scale_frame) for x in face_loc]
 			# print(y1,x2, y2,x1)
+			name =names[idx]
 			if matches[idx]:
-				name = names[idx]
+				#name = names[idx]
 				## scale down box size
 				draw_box(frame, (x1,y1), (x2,y2), Colour.green, name=f'{name} dis:{face_distance[idx]:.2f}' )
 
